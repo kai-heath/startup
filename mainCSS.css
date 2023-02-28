@@ -72,7 +72,7 @@ main {
     flex-direction: row;
   }
   .settingsContainer {
-    flex-direction: column;
+    grid-auto-flow: row;
   }
   .settings {
     font-size: 15px;
