@@ -25,6 +25,10 @@ footer {
   display: inline-block;
 }
 
+.settingsContainer a:active {
+  background-color: darkGray;
+}
+
 .settingsContainer a:hover {
   background-color: gray;
   color: white;
@@ -100,4 +104,13 @@ main {
   background-color: #feff9c;
   padding: 75px;
   cursor: move;
+}
+
+.content {
+  text-align: center;
+}
+
+.accountInfo > p{
+  margin-left: 10px;
+  text-align: left;
 }
