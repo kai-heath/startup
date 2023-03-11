@@ -96,14 +96,26 @@ main {
   grid-auto-rows: 300px;
   grid-gap: 1em;
   display: grid;
+}
+
+#deleteButton{
+  width:30px;
+  height:30px;
   text-align: center;
+  color:black;
+  border-color:transparent;
+  padding:0px;
+  border-radius: 0px;
 }
 
 .box {
   border: solid;
   background-color: #feff9c;
-  padding: 75px;
   cursor: move;
+}
+.box div {
+  padding-left: 20px;
+  word-break: break-word;
 }
 
 .content h2 {
@@ -153,4 +165,9 @@ main {
 
 #error {
   color:red;
+}
+
+#noteAdder {
+  text-align: center;
+  margin: 10px;
 }

@@ -1,5 +1,5 @@
 const accountsText = localStorage.getItem('accounts');
-accounts = [];
+accounts = [{username: 'Kai', password: 'ADMIN'}];
 if (accountsText) {
     accounts = JSON.parse(accountsText)
 }
@@ -40,6 +40,7 @@ function signup() {
     if (accounts == null) {
         accounts.push(newAccount);
         localStorage.setItem('accounts', JSON.stringify(accounts));
+        localStorage.setItem('user', JSON.stringify(currAccount))
         window.location.href = "board.html";
         return;
     }
@@ -53,6 +54,7 @@ function signup() {
     }
     accounts.push(newAccount);
     localStorage.setItem('accounts', JSON.stringify(accounts));
+    localStorage.setItem('user', JSON.stringify(currAccount));
     window.location.href = "board.html";
     return;
     }
