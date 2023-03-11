@@ -1,6 +1,6 @@
 const accountsText = localStorage.getItem('accounts');
 accounts = [{username: 'Kai', password: 'ADMIN'}];
-if (accountsText) {
+if (accountsText != undefined) {
     accounts = JSON.parse(accountsText)
 }
 
@@ -37,16 +37,14 @@ function signup() {
     const password = document.querySelector('#password').value;
     const newAccount = {username: username, password: password};
     
-    if (accounts == null) {
+    if (accounts == undefined) {
         accounts.push(newAccount);
         localStorage.setItem('accounts', JSON.stringify(accounts));
-        localStorage.setItem('user', JSON.stringify(currAccount))
+        localStorage.setItem('user', JSON.stringify(newAccount))
         window.location.href = "board.html";
         return;
     }
-    for (const  [i, currAccount] of accounts.entries()) {
-        console.log(currAccount.username);
-        console.log(username);
+    else for (const  [i, currAccount] of accounts.entries()) {
         if (username === currAccount.username) {
             error('username taken');
             return;
@@ -54,7 +52,7 @@ function signup() {
     }
     accounts.push(newAccount);
     localStorage.setItem('accounts', JSON.stringify(accounts));
-    localStorage.setItem('user', JSON.stringify(currAccount));
+    localStorage.setItem('user', JSON.stringify(newAccount));
     window.location.href = "board.html";
     return;
     }
