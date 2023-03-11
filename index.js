@@ -1,5 +1,5 @@
 const accountsText = localStorage.getItem('accounts');
-accounts = [{username: 'Kai', password: 'ADMIN'}];
+accounts = [{username: 'Kai', password: 'ADMIN'}, {username: 'your_dad', password:'vader'}];
 if (accountsText != undefined) {
     accounts = JSON.parse(accountsText)
 }

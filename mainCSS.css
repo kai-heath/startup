@@ -132,9 +132,9 @@ main {
   margin: auto;
   display: block;
 }
-
 .contentTable button {
-  margin: 10px;
+  margin: 5px;
+  text-align:right;
 }
 .loginInfo {
   text-align:center;
