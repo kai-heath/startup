@@ -140,3 +140,17 @@ main {
   background-color: red;
   
 }
+.loginInfo {
+  text-align:center;
+}
+.loginInfo > * {
+  margin: 8px;
+}
+
+.loginInfo button {
+  width: 20vh;
+}
+
+#error {
+  color:red;
+}
