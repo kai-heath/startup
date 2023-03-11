@@ -2,7 +2,7 @@ accountInfo = JSON.parse(localStorage.getItem('user'));
 console.log("yeet");
 username = accountInfo.username;
 password = accountInfo.password;
-requests = [];
+requests = ['your_dad'];
 if(accountInfo.requests) {
     requests = accountInfo.requests;
 }
@@ -78,4 +78,14 @@ function changeCurrBuddy(i) {
    localStorage.setItem('currBuddy', JSON.stringify(newFirst));
    currBuddy = newFirst;
    updateBoard();
+}
+
+function loadRequests() {
+    outputString = "";
+    for(i = 0; i < requests.length; i++) {
+        stringEnd = '<button class = "btn btn-success"onclick="acceptBuddy('+ i +')">accept</button><button class = "btn btn-secondary"onclick="buddyReject('+i+')">reject</button>';
+        request = requests[i];
+            outputString = '<p>'+request + stringEnd+ '</p>';
+    }
+    document.querySelector('#requestTable').innerHTML = outputString;
 }

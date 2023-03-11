@@ -2,6 +2,13 @@
 <html>
   <head>
     <link rel="stylesheet" href="mainCSS.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  
   </head>
   <header>
     <h1>Board Buddy</h1>
@@ -16,7 +23,7 @@
     </div>
     <section class = "requestsContent content">
         <h2>Buddy Requests:</h2>
-        <span class="requestInfo contentTable">
+        <div id="requestTable" class="requestInfo contentTable">
             <p>Prospective new buddy
                 <button class = "accept" type = button>accept</button>
                 <button class = "reject" type = button>reject</button>
@@ -37,11 +44,13 @@
                 <button class = "accept" type = button>accept</button>
                 <button class = "accept" type = button>also accept (you can't reject me)</button>
             </p>
-        </span>
+          </div>
     </section>
   </main>
   <footer>
     Author: Kai Heath
     <a href = "https://github.com/kai-heath/startup">Github</a>
   </footer>
+  <script src = 'main.js'></script>
+  <script>loadRequests();</script>
 </html>
