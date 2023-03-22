@@ -9,3 +9,5 @@ Startup CSS and HTML: I learned that using a single css file to make all the pag
 Simon javaScript: I learned that javaScript is a lot different in functionality than css or java, and catching errors is much more of a pain in the butt.
 
 Startup javaScript: I learned that, as the name implies, localStorage only stores information on devices locally, so if i want my website to have the functionality of having actual friends, ill need to create an sql database and a bunch more headachey stuff
+
+Simon Service: I learned that node.js is and express are very confusing and I'm still figuring out how they work and how to use them... I have a small grasp on http requests, but thats about it
