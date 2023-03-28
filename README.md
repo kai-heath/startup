@@ -12,4 +12,6 @@ Startup javaScript: I learned that, as the name implies, localStorage only store
 
 Simon Service: I learned that node.js is and express are very confusing and I'm still figuring out how they work and how to use them... I have a small grasp on http requests, but thats about it
 
-Simon-db I learned how there are different ways to store data than just an sql file, and that there are services online to store that data remotely for you to access
+Simon-db: I learned how there are different ways to store data than just an sql file, and that there are services online to store that data remotely for you to access
+
+Simon Login: I think it's funny how I'm doing a login assignment for my other programming class, and while they are both for similar purposes, the implementation of them is completely different. It really goes to show how many different ways there are to program something depending on the specific needs.
