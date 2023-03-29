@@ -15,3 +15,5 @@ Simon Service: I learned that node.js is and express are very confusing and I'm 
 Simon-db: I learned how there are different ways to store data than just an sql file, and that there are services online to store that data remotely for you to access
 
 Simon Login: I think it's funny how I'm doing a login assignment for my other programming class, and while they are both for similar purposes, the implementation of them is completely different. It really goes to show how many different ways there are to program something depending on the specific needs.
+
+Simon Websocket After dealing with the headache that is http requests in my other class, I think I like websocket a lot more...
