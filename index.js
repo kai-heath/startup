@@ -1,62 +1,134 @@
-const accountsText = localStorage.getItem('accounts');
-accounts = [{username: 'Kai', password: 'ADMIN'}, {username: 'your_dad', password:'vader'}];
-if (accountsText != undefined) {
-    accounts = JSON.parse(accountsText)
-}
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
+const express = require('express');
+const app = express();
+const DB = require('./database.js');
+//const { PeerProxy } = require('./peerProxy.js');
 
-function login() {
-    const username = document.querySelector('#username').value;
-    const password = document.querySelector('#password').value;
-    if (username == null && password == null) {
-        error('please enter username and password');
-        return;
-    }
-    if (password == null) {
-        error('Please enter password');
-        return;
-    }
-    if (username == null) {
-        error('please enter username');
-        return;
-    }
-    for (const  [i, currAccount] of accounts.entries()) {
-        console.log(currAccount.username);
-        console.log(username);
-        if (username === currAccount.username && password === currAccount.password) {
-            localStorage.setItem('user', JSON.stringify(currAccount))
-            window.location.href = "board.html";
-            return;
-        }
-    }
-    error('incorrect username or password')
-}
+const authCookieName = 'token';
 
+// The service port may be set on the command line
+const port = process.argv.length > 2 ? process.argv[2] : 3000;
 
-function signup() {
-    const username = document.querySelector('#username').value;
-    const password = document.querySelector('#password').value;
-    const newAccount = {username: username, password: password};
-    
-    if (accounts == undefined) {
-        accounts.push(newAccount);
-        localStorage.setItem('accounts', JSON.stringify(accounts));
-        localStorage.setItem('user', JSON.stringify(newAccount))
-        window.location.href = "board.html";
-        return;
+// JSON body parsing using built-in middleware
+app.use(express.json());
+
+// Use the cookie parser middleware for tracking authentication tokens
+app.use(cookieParser());
+
+// Serve up the applications static content
+app.use(express.static('public'));
+
+// Router for service endpoints
+var apiRouter = express.Router();
+app.use(`/api`, apiRouter);
+
+// CreateAuth token for a new user
+apiRouter.post('/auth/create', async (req, res) => {
+  if (await DB.getUser(req.body.username)) {
+    DB.getUser
+    res.status(409).send({ msg: 'Existing user' });
+  } else {
+    const user = await DB.createUser(req.body.username, req.body.password);
+
+    // Set the cookie
+    setAuthCookie(res, user.token);
+
+    res.send({
+      id: user._id,
+    });
+  }
+});
+
+// GetAuth token for the provided credentials
+apiRouter.post('/auth/login', async (req, res) => {
+  const user = await DB.getUser(req.body.username);
+  if (user) {
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      setAuthCookie(res, user.token);
+      res.send({ id: user._id });
+      return;
     }
-    else for (const  [i, currAccount] of accounts.entries()) {
-        if (username === currAccount.username) {
-            error('username taken');
-            return;
-        }
-    }
-    accounts.push(newAccount);
-    localStorage.setItem('accounts', JSON.stringify(accounts));
-    localStorage.setItem('user', JSON.stringify(newAccount));
-    window.location.href = "board.html";
+  }
+  res.status(401).send({ msg: 'Unauthorized' });
+});
+
+apiRouter.get('/user/board/:usernames', async (req, res) => {
+  usernames = req.params.usernames.split(",");
+  const board = await DB.getBoard(usernames);
+  if (board) {
+    res.send({notes : board.notes})
     return;
-    }
+  }
+  res.status(404).send({ msg: 'Unknown' });
+}); 
 
-function error(errorText) {
-    document.querySelector('#error').innerHTML = errorText;
+apiRouter.delete('/user/deleteNote', async (req, res) => {
+  console.log("yeet");
+  const usernames = req.body.usernames;
+  const board = await DB.getBoard(usernames);
+  console.log(board);
+  notes = board.notes;
+  notes.splice(req.body.index, 1);
+  DB.updateNotes(board, notes);
+  res.status(200).end();
+});
+
+apiRouter.post('/user/addNote')
+
+// DeleteAuth token if stored in cookie
+apiRouter.delete('/auth/logout', (_req, res) => {
+  res.clearCookie(authCookieName);
+  res.status(204).end();
+});
+
+// GetUser returns information about a user
+apiRouter.get('/user/:username', async (req, res) => {
+  const user = await DB.getUser(req.params.username);
+  if (user) {
+    const token = req.cookies.token;
+    console.log(user);
+    res.send({ username: user.username, authenticated: token === user.token, buddies : user.buddies });
+    return;
+  }
+  res.status(404).send({ msg: 'Unknown' });
+});
+
+// secureApiRouter verifies credentials for endpoints
+var secureApiRouter = express.Router();
+apiRouter.use(secureApiRouter);
+
+secureApiRouter.use(async (req, res, next) => {
+  const authToken = req.cookies[authCookieName];
+  const user = await DB.getUserByToken(authToken);
+  if (user) {
+    next();
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
+
+// Default error handler
+app.use(function (err, req, res, next) {
+  res.status(500).send({ type: err.name, message: err.message });
+});
+
+// Return the application's default page if the path is unknown
+app.use((_req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
+
+// setAuthCookie in the HTTP response
+function setAuthCookie(res, authToken) {
+  res.cookie(authCookieName, authToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
+  });
 }
+
+const httpService = app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
+
+//new PeerProxy(httpService);
