@@ -81,6 +81,7 @@ secureApiRouter.post('/user/acceptBuddy', async (req, res) => {
   DB.removeRequested(newBuddy, username);
 
   await DB.createBoard(username, newBuddy);
+  res.status(200).end();
 });
 
 secureApiRouter.post('user/rejectBuddy', async (req, res) => {
@@ -92,14 +93,16 @@ secureApiRouter.post('user/rejectBuddy', async (req, res) => {
 
   DB.removeRequest(username, failedBuddy);
   DB.removeRequested(failedBuddy, username);
+  res.status(200).end();
 });
 
 secureApiRouter.post('/user/makeRequest', async (req, res) => {
     const user = await DB.getUserByToken(req.cookies.token);
     const username = user.username;
     const newRequest = req.body.request;
-    DB.addRequest(username, newRequest);
-    DB.addRequested(newRequest, username);
+    DB.addRequest(newRequest, username);
+    DB.addRequested(username, newRequest);
+    res.status(200).end();
 });
 
 

@@ -22,14 +22,20 @@
     </div>
     <section class = "searchContent content">
         <h2>Enter a username:</h2>
-        <span class="text-center search searchBar contentTable" id="search">
-            <input type = "text" placeholder="Enter a username here"></input>
-            <button id="searchButton" class = "btn btn-primary">Add Buddy:</button>
-        </span>
+        <div class="text-center search searchBar contentTable" id="search">
+            <input id="searchBuddy" type = "text" placeholder="Enter a username here"></input>
+            <button onclick="searchBuddy()" id="searchButton" class = "btn btn-primary">Add Buddy</button>
+            <p id="searchResponse"></p>
+            <div id="buddyAcceptResponse">
+            
+
+            </div>
+        </div>
     </section>
   </main>
   <footer>
     Author: Kai Heath
     <a href = "https://github.com/kai-heath/startup">Github</a>
+    <script src = search.js></script>
   </footer>
 </html>

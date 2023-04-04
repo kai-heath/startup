@@ -134,7 +134,7 @@ main {
 }
 .contentTable button {
   margin: 5px;
-  text-align:right;
+  
 }
 .loginInfo {
   text-align:center;
@@ -160,6 +160,12 @@ main {
   cursor : pointer;
 }
 
-#searchButton {
+#search * {
+  align-items: center;
   text-align: center;
+}
+
+#searchResponse {
+  text-align: center;
+  color:#f44336;
 }

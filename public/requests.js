@@ -35,8 +35,10 @@ async function acceptBuddy(i) {
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
     },
-});
-loadRequests();
+    });
+    body = response.json;
+        console.log(body);
+        loadRequests();
 }
 
 async function rejectBuddy(i) {
@@ -47,6 +49,5 @@ async function rejectBuddy(i) {
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
     },
-});
-loadRequests();
+    }).then(loadRequests());
 }

@@ -70,8 +70,20 @@ async function createBoard(username1, username2) {
 
 
 async function createUser(username, password) {
+  console.log(username);
   const passwordHash = await bcrypt.hash(password, 10);
-  buddies = ['Kai'];
+  buddies = [];
+  if (username != "Kai") {
+    console.log("hello");
+    buddies = ['Kai'];
+    addBuddy("Kai", username);
+    const defaultBoard = {
+      usernames: [username, "Kai"],
+      notes: (["your first board!", "add or delete any notes you'd like!"]),
+    }
+    await boardCollection.insertOne(defaultBoard);
+  }
+  
 
   
 
@@ -84,13 +96,10 @@ async function createUser(username, password) {
     requested: []
   };
   
-  const defaultBoard = {
-    usernames: [username, 'Kai'],
-    notes: (["your first board!", "add or delete any notes you'd like!"]),
-  }
+  
   
   await userCollection.insertOne(user);
-  await boardCollection.insertOne(defaultBoard);
+  
 
   return user;
 }
