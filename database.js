@@ -17,13 +17,39 @@ const userCollection = client.db('startup').collection('user');
 const boardCollection = client.db('startup').collection('board');
 
 function getBoard(usernamesToFind) {
-  console.log(usernamesToFind);
   return boardCollection.findOne({usernames : {$all: usernamesToFind}});
 }
 
 function updateNotes(board, notes) {
-  board.notes = notes;
-  boardCollection.findOneAndReplace({usernames : board.usernames}, board);
+  
+  boardCollection.findOneAndUpdate({usernames : board.usernames}, {$set:{notes : notes}});
+}
+function updateRequests(username, requests) {
+  userCollection.findOneAndUpdate({username : username}, {$set:{requests : requests}});
+}
+
+function addRequest(username, request) {
+  userCollection.findOneAndUpdate({username : username}, {$addToSet: {requests : request}});
+}
+
+function removeRequest(username, request) {
+  userCollection.findOneAndUpdate({username : username}, {$pull: {requests : request}});
+}
+
+function addRequested(username, requested) {
+  userCollection.findOneAndUpdate({username : username}, {$addToSet: {requested : requested}});
+}
+
+function removeRequested(username, requested) {
+  userCollection.findOneAndUpdate({username : username}, {$pull: {requested : requested}});
+}
+
+function updateBuddies(user, buddies) {
+  userCollection.findOneAndUpdate({ username : user.username}, {$set: {buddies : buddies}});
+}
+
+function addBuddy(username, newBuddy) {
+  userCollection.findOneAndUpdate({username : username}, {$addToSet: {buddies : newBuddy}})
 }
 
 function getUser(username) {
@@ -32,6 +58,14 @@ function getUser(username) {
 
 function getUserByToken(token) {
   return userCollection.findOne({ token: token });
+}
+
+async function createBoard(username1, username2) {
+  const newBoard = {
+    usernames: [username1, username2],
+    notes:(["start adding notes with your new buddy!"])
+  }
+  await boardCollection.insertOne(newBoard);
 }
 
 
@@ -44,15 +78,17 @@ async function createUser(username, password) {
   const user = {
     username: username,
     password: passwordHash,
-    buddies: buddies.sort(),
+    buddies: buddies,
     token: uuid.v4(),
+    requests: [],
+    requested: []
   };
-  //console.log(user.buddies);
+  
   const defaultBoard = {
     usernames: [username, 'Kai'],
     notes: (["your first board!", "add or delete any notes you'd like!"]),
   }
-  console.log(defaultBoard.usernames);
+  
   await userCollection.insertOne(user);
   await boardCollection.insertOne(defaultBoard);
 
@@ -64,5 +100,13 @@ module.exports = {
   getUserByToken,
   createUser,
   getBoard,
-  updateNotes
+  updateNotes,
+  updateBuddies,
+  updateRequests,
+  createBoard,
+  addBuddy,
+  addRequest,
+  removeRequest,
+  addRequested,
+  removeRequested
 };

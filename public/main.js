@@ -15,36 +15,6 @@ if (localStorage.getItem('currBuddy')) {
 }
 objects = currBuddy.objects;
 
-function displayBuddies() {
-    buddyNamesString  = "";
-    const startString1 = '<a class="buddyLink"onclick="changeCurrBuddy(';
-    const startString2 =  ')"href="board.html">';
-    for(i = 0; i < buddies.length; i++) {
-        buddy = buddies[i];
-        buddyName = buddy.username;
-        buddyNamesString = buddyNamesString + startString1 + i + startString2 + buddyName + '</a><br>';
-    }
-    document.querySelector('#buddyList').innerHTML = buddyNamesString;
-}
-
-function changeCurrBuddy(i) {
-   newFirst = buddies[i];
-   buddies.splice(i,1);
-   buddies.unshift(newFirst);
-   localStorage.setItem('currBuddy', JSON.stringify(newFirst));
-   currBuddy = newFirst;
-   updateBoard();
-}
-
-function loadRequests() {
-    outputString = "";
-    for(i = 0; i < requests.length; i++) {
-        stringEnd = '<button class = "btn btn-success"onclick="acceptBuddy('+ i +')">accept</button><button class = "btn btn-secondary"onclick="buddyReject('+i+')">reject</button>';
-        request = requests[i];
-            outputString = '<p>'+request + stringEnd+ '</p>';
-    }
-    document.querySelector('#requestTable').innerHTML = outputString;
-}
 
 function displayAccount() {
     usernameField = document.querySelector("#username");

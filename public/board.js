@@ -8,9 +8,8 @@ const user = async () => {
     },
 });
 const body = await response?.json();
-console.log(body);
 if (response?.status === 200) {
-    return body
+    return body;
   }
 }
 
@@ -26,7 +25,6 @@ notes = async () => {
 });
 const body = await response?.json();
 if (response?.status === 200) {
-    console.log(body);
     return body;
   }
   return "error";
@@ -53,7 +51,6 @@ async function placeNotes() {
 
     for(i = 0; i < length; i++) {
         note = await notesText[i];
-        console.log(notesText);
             outputString = outputString + noteStart1 + i + noteStart2 + note + '</div></div>';
     }
     
@@ -70,13 +67,19 @@ async function deleteNote(i) {
     },
 });
 
-    displayBoard();
+    placeNotes();
 }
 
-function addNote() {
+async function addNote() {
     text = document.querySelector('#newNoteText').value;
-    objects.push({type: 'text', data: text});
     document.querySelector('#newNoteText').value = '';
-    updateBoard();
+    const fetchUrl = "/api/user/addNote";
+    const response = await fetch (fetchUrl, {
+    method: 'post',
+    body: JSON.stringify({newNote : text, usernames : [localStorage.getItem("currBuddy"), username]}),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+});
     placeNotes();
 }

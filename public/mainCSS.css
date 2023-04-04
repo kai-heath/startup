@@ -155,3 +155,11 @@ main {
   text-align: center;
   margin: 10px;
 }
+
+#buddyList {
+  cursor : pointer;
+}
+
+#searchButton {
+  text-align: center;
+}

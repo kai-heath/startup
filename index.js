@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const app = express();
 const DB = require('./database.js');
-//const { PeerProxy } = require('./peerProxy.js');
+const { PeerProxy } = require('./peerProxy.js');
 
 const authCookieName = 'token';
 
@@ -53,47 +53,6 @@ apiRouter.post('/auth/login', async (req, res) => {
   res.status(401).send({ msg: 'Unauthorized' });
 });
 
-apiRouter.get('/user/board/:usernames', async (req, res) => {
-  usernames = req.params.usernames.split(",");
-  const board = await DB.getBoard(usernames);
-  if (board) {
-    res.send({notes : board.notes})
-    return;
-  }
-  res.status(404).send({ msg: 'Unknown' });
-}); 
-
-apiRouter.delete('/user/deleteNote', async (req, res) => {
-  console.log("yeet");
-  const usernames = req.body.usernames;
-  const board = await DB.getBoard(usernames);
-  console.log(board);
-  notes = board.notes;
-  notes.splice(req.body.index, 1);
-  DB.updateNotes(board, notes);
-  res.status(200).end();
-});
-
-apiRouter.post('/user/addNote')
-
-// DeleteAuth token if stored in cookie
-apiRouter.delete('/auth/logout', (_req, res) => {
-  res.clearCookie(authCookieName);
-  res.status(204).end();
-});
-
-// GetUser returns information about a user
-apiRouter.get('/user/:username', async (req, res) => {
-  const user = await DB.getUser(req.params.username);
-  if (user) {
-    const token = req.cookies.token;
-    console.log(user);
-    res.send({ username: user.username, authenticated: token === user.token, buddies : user.buddies });
-    return;
-  }
-  res.status(404).send({ msg: 'Unknown' });
-});
-
 // secureApiRouter verifies credentials for endpoints
 var secureApiRouter = express.Router();
 apiRouter.use(secureApiRouter);
@@ -106,6 +65,101 @@ secureApiRouter.use(async (req, res, next) => {
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
   }
+});
+
+secureApiRouter.post('/user/acceptBuddy', async (req, res) => {
+  const user = await DB.getUserByToken(req.cookies.token);
+  const username = user.username;
+  buddies = user.buddies;
+  requests = user.requests;
+  const newBuddy = requests[req.body.index];
+
+  DB.removeRequest(username, newBuddy);
+  DB.addBuddy(username, newBuddy);
+
+  DB.addBuddy(newBuddy, username);
+  DB.removeRequested(newBuddy, username);
+
+  await DB.createBoard(username, newBuddy);
+});
+
+secureApiRouter.post('user/rejectBuddy', async (req, res) => {
+  const user = await DB.getUserByToken(req.cookies.token);
+  const username = user.username;
+  buddies = user.buddies;
+  requests = user.requests;
+  const failedBuddy = requests[req.body.index];
+
+  DB.removeRequest(username, failedBuddy);
+  DB.removeRequested(failedBuddy, username);
+});
+
+secureApiRouter.post('/user/makeRequest', async (req, res) => {
+    const user = await DB.getUserByToken(req.cookies.token);
+    const username = user.username;
+    const newRequest = req.body.request;
+    DB.addRequest(username, newRequest);
+    DB.addRequested(newRequest, username);
+});
+
+
+
+apiRouter.get('/user/board/:usernames', async (req, res) => {
+  usernames = req.params.usernames.split(",");
+  const board = await DB.getBoard(usernames);
+  if (board) {
+    res.send({notes : board.notes})
+    return;
+  }
+  res.status(404).send({ msg: 'Unknown' });
+}); 
+
+secureApiRouter.delete('/user/deleteNote', async (req, res) => {
+  const usernames = req.body.usernames;
+  const board = await DB.getBoard(usernames);
+  notes = board.notes;
+  notes.splice(req.body.index, 1);
+  DB.updateNotes(board, notes);
+  res.status(200).end();
+});
+
+secureApiRouter.post('/user/addNote', async (req, res) => {
+  const usernames = req.body.usernames;
+  const board = await DB.getBoard(usernames);
+  notes = board.notes;
+  notes.push(req.body.newNote);
+  DB.updateNotes(board, notes);
+  res.status(200).end();
+});
+
+secureApiRouter.post('/user/buddyOrder', async (req, res) => {
+  const index = req.body.index;
+  console.log(index);
+  const user = await DB.getUserByToken(req.cookies.token);
+  buddies = user.buddies;
+  newFirst = buddies[index];
+  buddies.splice(index,1);
+  buddies.unshift(newFirst);
+  console.log(buddies);
+  DB.updateBuddies(user, buddies);
+  res.status(200).end();
+});
+
+// DeleteAuth token if stored in cookie
+apiRouter.delete('/auth/logout', (_req, res) => {
+  res.clearCookie(authCookieName);
+  res.status(204).end();
+});
+
+// GetUser returns information about a user
+apiRouter.get('/user/:username', async (req, res) => {
+  const user = await DB.getUser(req.params.username);
+  if (user) {
+    const token = req.cookies.token;
+    res.send({ requests: user.requests, requested: user.requested, username: user.username, authenticated: token === user.token, buddies : user.buddies });
+    return;
+  }
+  res.status(404).send({ msg: 'Unknown' });
 });
 
 // Default error handler
@@ -131,4 +185,4 @@ const httpService = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 
-//new PeerProxy(httpService);
+new PeerProxy(httpService);
