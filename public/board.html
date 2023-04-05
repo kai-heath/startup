@@ -23,8 +23,8 @@
     <div id="noteAdder">
       <label>add a new Note:</label>
       <input id='newNoteText'type='text' class="col-sm-4 control-label" placeholder="type what you want it to say!"></input>
-      <button class = "btn btn-primary"onclick="addNote()">add</button>
-      <button class = "btn btn-primary"onclick="addFunnyQuote()">add a Chuck Norris joke!</button>
+      <button class = "btn btn-primary"onclick="Board.addNote()">add</button>
+      <button class = "btn btn-primary"onclick="Board.addFunnyQuote()">add a Chuck Norris joke!</button>
     </div>
   </main>
   <footer>
@@ -32,5 +32,5 @@
     <a href = "https://github.com/kai-heath/startup">Github</a>
   </footer>
   <script src = board.js></script>
-  <script>displayBoard();</script>
+  <script>Board = new board();</script>
 </html>
