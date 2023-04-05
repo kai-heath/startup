@@ -17,3 +17,5 @@ Simon-db: I learned how there are different ways to store data than just an sql 
 Simon Login: I think it's funny how I'm doing a login assignment for my other programming class, and while they are both for similar purposes, the implementation of them is completely different. It really goes to show how many different ways there are to program something depending on the specific needs.
 
 Simon Websocket After dealing with the headache that is http requests in my other class, I think I like websocket a lot more...
+
+Startup Service: I spent hours on this project and while it works on my localhost, I cannot for the life of me figure out why its not working on my server. I'm leaving in an hour to go hike Machu Pichu for 4 days with no internet access, so this is the best I can do for now.
