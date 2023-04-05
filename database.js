@@ -20,6 +20,14 @@ function getBoard(usernamesToFind) {
   return boardCollection.findOne({usernames : {$all: usernamesToFind}});
 }
 
+function deleteAccount(username) {
+  userCollection.findOneAndDelete({username : username});
+  userCollection.updateMany({buddies : {$in : [username]}}, {$pull: {buddies : username}});
+  userCollection.updateMany({requests : {$in : [username]}}, {$pull: {requests : username}});
+  userCollection.updateMany({requested : {$in : [username]}}, {$pull: {requested : username}});
+  boardCollection.deleteMany({usernames : {$in : [username]}});
+}
+
 function updateNotes(board, notes) {
   
   boardCollection.findOneAndUpdate({usernames : board.usernames}, {$set:{notes : notes}});
@@ -50,6 +58,10 @@ function updateBuddies(user, buddies) {
 
 function addBuddy(username, newBuddy) {
   userCollection.findOneAndUpdate({username : username}, {$addToSet: {buddies : newBuddy}})
+}
+
+function deleteBuddy(username, buddy) {
+  userCollection.findOneAndUpdate({username : username}, {$pull: {buddies : buddy}});
 }
 
 function getUser(username) {
@@ -117,5 +129,7 @@ module.exports = {
   addRequest,
   removeRequest,
   addRequested,
-  removeRequested
+  removeRequested,
+  deleteBuddy,
+  deleteAccount
 };

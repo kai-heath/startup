@@ -154,6 +154,25 @@ apiRouter.delete('/auth/logout', (_req, res) => {
   res.status(204).end();
 });
 
+apiRouter.delete('/auth/deleteAccount', (req, res) => {
+  username = req.body.username;
+  DB.deleteAccount(username);
+  res.clearCookie(authCookieName);
+  res.status(204).end();
+});
+
+secureApiRouter.delete('/user/removeBuddy/:buddy', async (req, res) => {
+  user = await DB.getUserByToken(req.cookies.token);
+  username = user.username;
+  buddy = req.params.buddy;
+  console.log("deleting");
+
+  DB.deleteBuddy(username, buddy);
+  DB.deleteBuddy(buddy,username);
+  res.status(200).end();
+});
+  
+
 // GetUser returns information about a user
 apiRouter.get('/user/:username', async (req, res) => {
   const user = await DB.getUser(req.params.username);

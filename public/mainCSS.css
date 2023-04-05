@@ -111,10 +111,10 @@ main {
 .box {
   border: solid;
   background-color: #feff9c;
-  cursor: move;
 }
 .box div {
-  padding-left: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
   word-break: break-word;
 }
 

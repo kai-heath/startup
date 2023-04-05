@@ -16,9 +16,3 @@ if (localStorage.getItem('currBuddy')) {
 objects = currBuddy.objects;
 
 
-function displayAccount() {
-    usernameField = document.querySelector("#username");
-    buddyCount = document.querySelector("#buddyCount");
-    usernameField.innerHTML = "Username: " + username;
-    buddyCount.innerHTML = "Number of buddies: " + buddies.length;
-}

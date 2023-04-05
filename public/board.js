@@ -35,6 +35,10 @@ if (response?.status === 200) {
 async function displayBoard() {
     const currUser = await user();
     const currBuddy = currUser?.buddies[0];
+    if (!currBuddy) {
+      window.location.href = 'buddies.html';
+      return;
+    }
     localStorage.setItem('currBuddy', currBuddy);
     document.querySelector('#boardHeader').innerHTML = currBuddy + "'s and Your Board";
     placeNotes();
@@ -77,6 +81,26 @@ async function addNote() {
     const response = await fetch (fetchUrl, {
     method: 'post',
     body: JSON.stringify({newNote : text, usernames : [localStorage.getItem("currBuddy"), username]}),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+});
+    placeNotes();
+}
+
+async function addFunnyQuote() {
+  
+  await fetch('https://api.chucknorris.io/jokes/random')
+  .then((response) => response?.json())
+  .then((jsonResponse) => {
+    newNote = jsonResponse?.value;
+  });
+  console.log(newNote);
+
+  const fetchUrl = "/api/user/addNote";
+    const response = await fetch (fetchUrl, {
+    method: 'post',
+    body: JSON.stringify({newNote : newNote, usernames : [localStorage.getItem("currBuddy"), username]}),
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
     },
