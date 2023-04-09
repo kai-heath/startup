@@ -2,6 +2,14 @@
 async function login() {
     const username = document.querySelector('#username')?.value;
     const password = document.querySelector('#password')?.value;
+    if (username === "") {
+      error("please enter a username");
+      return;
+    }
+    if (password === "") {
+      error("please enter a password");
+      return;
+    }
     const response = await fetch("api/auth/login", {
         method: 'post',
         body: JSON.stringify({ username: username, password: password }),
@@ -23,6 +31,14 @@ async function login() {
 async function signup() {
     const username = document.querySelector('#username')?.value;
     const password = document.querySelector('#password')?.value;
+    if (username === "") {
+      error("please enter a username");
+      return;
+    }
+    if (password === "") {
+      error("please enter a password");
+      return;
+    }
     const response = await fetch ("api/auth/create", {
         method: 'post', 
         body: JSON.stringify({ username: username, password: password }),

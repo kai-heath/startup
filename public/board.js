@@ -98,18 +98,19 @@ this.broadcastEvent([localStorage.getItem("currBuddy"), this.username])
 }
 
 async addFunnyQuote() {
-  
+  let newNote = "";
+  console.log("yeet");
   await fetch('https://api.chucknorris.io/jokes/random')
   .then((response) => response?.json())
   .then((jsonResponse) => {
-    newNote = jsonResponse?.value;
+   newNote = jsonResponse?.value;
   });
   console.log(newNote);
 
   const fetchUrl = "/api/user/addNote";
     const response = await fetch (fetchUrl, {
     method: 'post',
-    body: JSON.stringify({newNote : newNote, usernames : [localStorage.getItem("currBuddy"), username]}),
+    body: JSON.stringify({newNote : newNote, usernames : [localStorage.getItem("currBuddy"), this.username]}),
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
     },
