@@ -4,6 +4,8 @@
   "description": "This demonstrates using WebSocket for peer to peer communication.",
   "main": "index.js",
   "scripts": {
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
