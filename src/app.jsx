@@ -2,34 +2,12 @@ import React from 'react';
 
 import { NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
-import { Play } from './play/play';
-import { Scores } from './scores/scores';
-import { About } from './about/about';
-import { AuthState } from './login/authState';
+import { Board } from './board/board';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
 function App() {
   const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
-
-  // Asynchronously determine if the user is authenticated by calling the service
-  const [authState, setAuthState] = React.useState(AuthState.Unknown);
-  React.useEffect(() => {
-    if (userName) {
-      fetch(`/api/user/${userName}`)
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json();
-          }
-        })
-        .then((user) => {
-          const state = user?.authenticated ? AuthState.Authenticated : AuthState.Unauthenticated;
-          setAuthState(state);
-        });
-    } else {
-      setAuthState(AuthState.Unauthenticated);
-    }
-  }, [userName]);
 
   return (
     <div className = "page">
@@ -40,8 +18,6 @@ function App() {
       <Routes>
         <Route path='/'element={<Login />}exact/>
         <Route path='/board' element={<Board />} />
-        <Route path='/buddies' element={<Buddies />} />
-        <Route path='/about' element={<About />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
 

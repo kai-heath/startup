@@ -44,7 +44,7 @@ export function Login({ userName, authState, onAuthChange }) {
     if (response?.status === 200) {
         localStorage.setItem('username', username);
         console.log(response?.status);
-        navigate('/about');
+        navigate('/board');
       } else {
          error(body.msg);
       }
@@ -71,7 +71,7 @@ export function Login({ userName, authState, onAuthChange }) {
     if (response?.status === 200) {
         localStorage.setItem('username', username);
         console.log(response?.status);
-        window.location.href = 'board.html';
+        navigate('/board');
       } else {
          error(body.msg);
       }
