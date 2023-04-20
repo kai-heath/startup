@@ -81,7 +81,6 @@ export function Board({}) {
     }
     
     async deleteNote(i) {
-        console.log("yeet");
         const fetchUrl = "/api/user/deleteNote";
         const response = await fetch (fetchUrl, {
         method: 'delete',
@@ -105,26 +104,28 @@ export function Board({}) {
           'Content-type': 'application/json; charset=UTF-8',
         },
     });
-    this.broadcastEvent([localStorage.getItem("currBuddy"), this.username])
+    this.broadcastEvent([localStorage.getItem("currBuddy"), this.username]);
     }
     
     async addFunnyQuote() {
-      let jsonResponse = null;
-      console.log("yeet");
+        let newNote = "";
       await fetch('https://api.chucknorris.io/jokes/random')
       .then((response) => response?.json())
       .then((jsonResponse) => {
-       jsonResponse = jsonResponse;
+       newNote = jsonResponse;
       });
+      console.log(newNote?.value);
+       
     
       const fetchUrl = "/api/user/addNote";
         const response = await fetch (fetchUrl, {
         method: 'post',
-        body: JSON.stringify({newNote : jsonResponse?.value, usernames : [localStorage.getItem("currBuddy"), this.username]}),
+        body: JSON.stringify({newNote : newNote?.value, usernames : [localStorage.getItem("currBuddy"), this.username]}),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
         },
-      }).then(this.broadcastEvent([localStorage.getItem("currBuddy"), this.username]));
+      })
+      this.broadcastEvent([localStorage.getItem("currBuddy"), this.username]);
     }
     
     configureWebSocket() {
@@ -136,7 +137,8 @@ export function Board({}) {
       this.socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
       
       this.socket.onmessage = async (event) => {
-        const msg = JSON.parse(await event.data.text());
+        console.log(event.usernames);
+        const msg = JSON.parse(await event.usernames);
         const usernames = msg?.usernames;
         if (usernames.includes(this.username)) {
           this.placeNotes();
@@ -154,10 +156,10 @@ export function Board({}) {
     return (
     <main>
         <div src = {new board()} className = "settingsContainer">
-        <NavLink className='nav-link settings' to='account'>Account</NavLink>
-        <NavLink className='nav-link settings' to='buddies'>Buddies</NavLink>
-          <NavLink to = "requests" className = "nav-link settings">Requests</NavLink>
-          <NavLink to = "search" className = "nav-link settings">Search for Buddies</NavLink>
+        <NavLink className='nav-link settings' to='/account'>Account</NavLink>
+        <NavLink className='nav-link settings' to='/buddies'>Buddies</NavLink>
+          <NavLink to = "/requests" className = "nav-link settings">Requests</NavLink>
+          <NavLink to = "/search" className = "nav-link settings">Search for Buddies</NavLink>
         </div>
         <section className = "boardContent content">
       <h2 id="boardHeader">Loading...</h2>

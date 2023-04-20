@@ -3,6 +3,9 @@ import React from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
 import { Board } from './board/board';
+import { Buddies } from './buddies/buddies';
+import { Requests } from './requests/requests';
+import { Search } from './search/search';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
@@ -18,6 +21,9 @@ function App() {
       <Routes>
         <Route path='/'element={<Login />}exact/>
         <Route path='/board' element={<Board />} />
+        <Route path='/buddies' element={<Buddies />} />
+        <Route path='/requests' element={<Requests />} />
+        <Route path='/search' element={<Search />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
 
