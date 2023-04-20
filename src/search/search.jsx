@@ -50,15 +50,20 @@ export function Search() {
     }
     
     function outputMessage(string) {
-        document.querySelector('#searchResponse').innerHTML = string;
+        let newElement = React.createElement("p", {}, string);
+        ReactDOM.createRoot(document.getElementById('searchResponse')).render(newElement);
     }
     
     function setBuddyRequest(newBuddy) {
-        let acceptButton = "<button class = 'btn btn-success' onclick = 'sendRequest("+'"'+newBuddy+'"'+")'>Send</button>";
-        let cancelButton = "<button class = 'btn btn-danger' onclick = 'cancelRequest()'>Cancel</button>";
-        let query = "<h3>Send Buddy request to " + newBuddy + "?</h3>"
-        let text = query + acceptButton + cancelButton;
-        document.querySelector('#buddyAcceptResponse').innerHTML = (text);
+        let acceptButtonElement = React.createElement("button", {className:'btn btn-success', onClick:()=>sendRequest(newBuddy)},"send");
+        let cancelButtonElement = React.createElement("button", {className:'btn btn-danger', onClick:()=>cancelRequest()},"cancel");
+        let queryElement = React.createElement("h3", {}, "Send Buddy request to " + newBuddy + "?");
+        ReactDOM.createRoot(document.getElementById('buddyAcceptResponse')).render([queryElement, acceptButtonElement, cancelButtonElement]);
+    }
+
+    function cancelRequest() {
+        outputMessage("");
+        ReactDOM.createRoot(document.getElementById('buddyAcceptResponse')).render("");
     }
     
     async function sendRequest(newBuddy) {
@@ -80,20 +85,18 @@ export function Search() {
         return (
             <main>
     <div className = "settingsContainer">
-      <a href = "account.html" className = "settings">My Account</a>
-      <a href = "buddies.html" className = "settings">Buddies</a>
-      <a href = "requests.html" className = "settings">Requests</a>
-      <a href = "search.html" className = "settings">Search for Buddies</a>
+    <NavLink className='nav-link settings' to='/account'>Account</NavLink>
+        <NavLink className='nav-link settings' to='/buddies'>Buddies</NavLink>
+          <NavLink to = "/requests" className = "nav-link settings">Requests</NavLink>
+          <NavLink to = "/search" className = "nav-link settings">Search for Buddies</NavLink>
     </div>
     <section className = "searchContent content">
         <h2>Enter a username:</h2>
         <div className="text-center search searchBar contentTable" id="search">
             <input id="searchBuddy" type = "text" placeholder="Enter a username here"></input>
-            <button onclick="searchBuddy()" id="searchButton" className = "btn btn-primary">Add Buddy</button>
+            <button onClick={()=>searchBuddy()} id="searchButton" className = "btn btn-primary">Add Buddy</button>
             <p id="searchResponse"></p>
             <div id="buddyAcceptResponse">
-            
-
             </div>
         </div>
     </section>

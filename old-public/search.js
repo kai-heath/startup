@@ -56,6 +56,8 @@ function setBuddyRequest(newBuddy) {
     document.querySelector('#buddyAcceptResponse').innerHTML = (text);
 }
 
+
+
 async function sendRequest(newBuddy) {
     const fetchUrl = "/api/user/makeRequest";
     const response = await fetch (fetchUrl, {
