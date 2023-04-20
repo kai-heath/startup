@@ -70,7 +70,6 @@ export function Login({ userName, authState, onAuthChange }) {
     const body = await response?.json();
     if (response?.status === 200) {
         localStorage.setItem('username', username);
-        console.log(response?.status);
         navigate('/board');
       } else {
          error(body.msg);

@@ -6,6 +6,7 @@ import { Board } from './board/board';
 import { Buddies } from './buddies/buddies';
 import { Requests } from './requests/requests';
 import { Search } from './search/search';
+import { Account } from './account/account';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
@@ -24,6 +25,7 @@ function App() {
         <Route path='/buddies' element={<Buddies />} />
         <Route path='/requests' element={<Requests />} />
         <Route path='/search' element={<Search />} />
+        <Route path='/account' element={<Account />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
 
