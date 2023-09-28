@@ -20,3 +20,5 @@ Simon Websocket After dealing with the headache that is http requests in my othe
 
 Startup Service: I spent hours on this project and while it works on my localhost, I cannot for the life of me figure out why its not working on my server. I'm leaving in an hour to go hike Machu Pichu for 4 days with no internet access, so this is the best I can do for now.
 Edit: nvm I just forgot to reset the server after updating the mongodb password, it works perfectly now, but now I know how much of a headache that can cause.
+
+React service: as much as i realize this is much nicer and better than just a websocket, it still kinda stinks to have to rewrite my entire code for this
