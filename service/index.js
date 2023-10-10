@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const app = express();
 const DB = require('./database.js');
-const { PeerProxy } = require('./peerProxy.js');
+const { PeerProxy } = require('./peerProxy.js').default;
 
 const authCookieName = 'token';
 
